@@ -10,7 +10,7 @@ st.set_page_config(
 col_logo, col_baslik = st.columns([1,3])
 
 with col_logo:
-    st.image(".streamlit/albond logo.png", width=180)
+    st.image("albond logo.png", width=180)
 
 with col_baslik:
     st.markdown(
