@@ -487,6 +487,8 @@ with tab1:
             solid_sonuc +
             koprulu_sonuc
         )
+        st.session_state["genel_puan"] = genel_puan
+
 
         # RİSK DEĞERLENDİRMESİ
 
@@ -1276,6 +1278,8 @@ with tab1:
                 fire_sonuc +
                 du_sonuc
             )
+        st.session_state["pres_genel_puan"] = pres_genel_puan
+        
         if pres_genel_puan >= 80:
 
             st.success("🟢 Düşük Risk")
@@ -1529,6 +1533,9 @@ with tab1:
             boya_rengi_sonuc
         )
 
+        st.session_state["boyahane_genel_puan"] = boyahane_genel_puan
+
+
         if boyahane_genel_puan >= 80:
 
             st.success("🟢 Düşük Risk")
@@ -1593,6 +1600,9 @@ with tab1:
 with tab4:
 
     st.header("⭐ Genel Sonuç")
+    genel_puan = st.session_state.get("genel_puan", 0)
+    pres_genel_puan = st.session_state.get("pres_genel_puan", 0)
+    boyahane_genel_puan = st.session_state.get("boyahane_genel_puan", 0)
 
     st.metric(
         "📋 Kalıphane Puanı",
