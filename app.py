@@ -10,7 +10,7 @@ st.set_page_config(
 col_logo, col_baslik = st.columns([1,3])
 
 with col_logo:
-    st.image("albond logo.png", width=180)
+    st.image(".streamlit/albond logo.png", width=180)
 
 with col_baslik:
     st.markdown(
@@ -25,10 +25,13 @@ with col_baslik:
         """,
         unsafe_allow_html=True
     )
-    tab1, tab2 = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "📋 Kalıphane",
-    "🏭 Pres"
+    "🏭 Pres",
+    "🎨 Boyahane",
+    "⭐ Genel Sonuç"
 ])
+
 
 with tab1:
     st.subheader("Teknik Resim")
@@ -36,6 +39,7 @@ with tab1:
     bulunan_cevre = 0.0
     bulunan_du = 0.0
     bulunan_agirlik = 0.0
+    genel_puan = 0.0
 
     uploaded_pdf = st.file_uploader(
     "PDF Teknik Resim Yükle",
@@ -1287,3 +1291,356 @@ with tab1:
         st.success(
         f"🏭 Pres Genel Puanı : {round(pres_genel_puan,2)} / 100"
             )
+    with tab3:
+
+        st.header("🎨 Boyahane Fizibilitesi")
+
+        # GRAMAJ
+
+        gramaj = st.number_input(
+            "🔴 Gramaj (kg/m)",
+            min_value=0.0,
+            value=bulunan_agirlik,
+            step=0.01
+        )
+
+        if gramaj >= 2.5:
+            p_gramaj = 10
+
+        elif 1.51 <= gramaj <= 2.49:
+            p_gramaj = 7
+
+        elif 0.31 <= gramaj <= 1.50:
+            p_gramaj = 4
+
+        else:
+            p_gramaj = 1
+
+
+        # SİPARİŞ BOYU
+
+        siparis_boyu_boya = st.selectbox(
+            "🔴 Sipariş Boyu",
+            [
+                "6000-8000",
+                "4001-5999",
+                "2001-4000",
+                "2000 ve altı"
+            ]
+        )
+
+        if siparis_boyu_boya == "6000-8000":
+            p_boya_boy = 10
+
+        elif siparis_boyu_boya == "4001-5999":
+            p_boya_boy = 7
+
+        elif siparis_boyu_boya == "2001-4000":
+            p_boya_boy = 4
+
+        else:
+            p_boya_boy = 1
+
+
+        # ASKI İZİ
+
+        aski_izi = st.selectbox(
+            "🔴 Askı İzi",
+            [
+                "Var",
+                "Yok"
+            ]
+        )
+
+        if aski_izi == "Var":
+            p_aski = 10
+        else:
+            p_aski = 1
+
+
+        # SATİNAJ
+
+        satinaj = st.selectbox(
+            "🔴 Kesitin Satinaja Uygunluğu",
+            [
+                "Uygun",
+                "Uygun Değil"
+            ]
+        )
+
+        if satinaj == "Uygun":
+            p_satinaj = 10
+        else:
+            p_satinaj = 1
+
+
+        # RENK MİKTARI
+
+        renk_miktari = st.selectbox(
+            "🔴 Renk Miktarı",
+            [
+                "Standart Renk - 1000 kg ve üzeri",
+                "Özel Renk - 1000 kg ve üzeri",
+                "Standart Renk - 999 kg altı",
+                "Özel Renk - 999 kg altı"
+            ]
+        )
+
+        if renk_miktari == "Standart Renk - 1000 kg ve üzeri":
+            p_renk = 10
+
+        elif renk_miktari == "Özel Renk - 1000 kg ve üzeri":
+            p_renk = 7
+
+        elif renk_miktari == "Standart Renk - 999 kg altı":
+            p_renk = 4
+
+        else:
+            p_renk = 1
+
+
+        # BAĞLAMA ŞEKLİ
+
+        baglama = st.selectbox(
+            "🔴 Bağlama Şekli",
+            [
+                "Kancalı Kaba Profiller",
+                "İnce Profiller"
+            ]
+        )
+
+        if baglama == "Kancalı Kaba Profiller":
+            p_baglama = 10
+        else:
+            p_baglama = 7
+
+
+        # ÇAPAK ADEDİ
+
+        capak = st.selectbox(
+            "🔴 Kabul Edilen Metredeki Çapak Adedi",
+            [
+                "5-6 Adet",
+                "3-4 Adet",
+                "1-2 Adet",
+                "Hiç Çapak Yok"
+            ]
+        )
+
+        if capak == "5-6 Adet":
+            p_capak = 10
+
+        elif capak == "3-4 Adet":
+            p_capak = 7
+
+        elif capak == "1-2 Adet":
+            p_capak = 4
+
+        else:
+            p_capak = 1
+
+
+        # KULLANIM YERİ
+
+        kullanim_yeri = st.selectbox(
+            "🔴 Profilin Kullanım Yeri",
+            [
+                "Cephe Sistemleri - Cotta Serisi",
+                "Isı Bariyeri",
+                "Cam Balkon - Tır Dorsesi",
+                "Mobilya - Otomotiv"
+            ]
+        )
+
+        if kullanim_yeri == "Cephe Sistemleri - Cotta Serisi":
+            p_kullanim = 10
+
+        elif kullanim_yeri == "Isı Bariyeri":
+            p_kullanim = 7
+
+        elif kullanim_yeri == "Cam Balkon - Tır Dorsesi":
+            p_kullanim = 4
+
+        else:
+            p_kullanim = 1
+
+
+        # GÖRÜNÜR YÜZEY
+
+        gorunur_yuzey = st.selectbox(
+            "🔴 Görünür Yüzey",
+            [
+                "Köprülü Kalıp - Kancalı Asılabilenler",
+                "Görünür Yüzey Harici Askılama Yapılacak Profiller",
+                "Her Yer Görünür Yüzey - Şartlı Onay Alınan",
+                "Her Yer Görünür Yüzey - Şartlı Onay Alınmayan"
+            ]
+        )
+
+        if gorunur_yuzey == "Köprülü Kalıp - Kancalı Asılabilenler":
+            p_gorunur = 10
+
+        elif gorunur_yuzey == "Görünür Yüzey Harici Askılama Yapılacak Profiller":
+            p_gorunur = 7
+
+        elif gorunur_yuzey == "Her Yer Görünür Yüzey - Şartlı Onay Alınan":
+            p_gorunur = 4
+
+        else:
+            p_gorunur = 1
+
+
+        # BOYA RENGİ
+
+        boya_rengi = st.selectbox(
+            "🔴 Boya Rengi",
+            [
+                "Dalga Yapmayan Düz Renkler",
+                "Pütürlü Dalga Yapabilecek Renkler"
+            ]
+        )
+
+        if boya_rengi == "Dalga Yapmayan Düz Renkler":
+            p_boya_rengi = 10
+        else:
+            p_boya_rengi = 4
+
+        gramaj_sonuc = (p_gramaj * 10) / 10
+        boy_sonuc = (p_boya_boy * 10) / 10
+        aski_sonuc = (p_aski * 10) / 10
+        satinaj_sonuc = (p_satinaj * 10) / 10
+        renk_sonuc = (p_renk * 10) / 10
+        baglama_sonuc = (p_baglama * 10) / 10
+        capak_sonuc = (p_capak * 10) / 10
+        kullanim_sonuc = (p_kullanim * 10) / 10
+        gorunur_sonuc = (p_gorunur * 10) / 10
+        boya_rengi_sonuc = (p_boya_rengi * 10) / 10
+
+        boyahane_genel_puan = (
+            gramaj_sonuc +
+            boy_sonuc +
+            aski_sonuc +
+            satinaj_sonuc +
+            renk_sonuc +
+            baglama_sonuc +
+            capak_sonuc +
+            kullanim_sonuc +
+            gorunur_sonuc +
+            boya_rengi_sonuc
+        )
+
+        if boyahane_genel_puan >= 80:
+
+            st.success("🟢 Düşük Risk")
+
+        elif boyahane_genel_puan >= 60:
+
+            st.warning("🟡 Orta Risk")
+
+        else:
+
+            st.error("🔴 Yüksek Risk")
+
+        st.divider()
+
+        st.subheader("Boyahane Sonuç Tablosu")
+
+        boya_df = pd.DataFrame({
+
+            "Kriter": [
+                "Gramaj",
+                "Sipariş Boyu",
+                "Askı İzi",
+                "Satınaj Uygunluğu",
+                "Renk Miktarı",
+                "Bağlama Şekli",
+                "Çapak Adedi",
+                "Kullanım Yeri",
+                "Görünür Yüzey",
+                "Boya Rengi"
+            ],
+
+            "Etki %": [
+                10,10,10,10,10,
+                10,10,10,10,10
+            ],
+
+            "Alınan Puan": [
+                gramaj_sonuc,
+                boy_sonuc,
+                aski_sonuc,
+                satinaj_sonuc,
+                renk_sonuc,
+                baglama_sonuc,
+                capak_sonuc,
+                kullanim_sonuc,
+                gorunur_sonuc,
+                boya_rengi_sonuc
+            ]
+        })
+
+        st.dataframe(
+            boya_df,
+            use_container_width=True,
+            hide_index=True,
+            height=500
+        )
+
+        st.success(
+            f"🎨 Boyahane Genel Puanı : {round(boyahane_genel_puan,2)} / 100"
+        )
+
+with tab4:
+
+    st.header("⭐ Genel Sonuç")
+
+    st.metric(
+        "📋 Kalıphane Puanı",
+        round(genel_puan, 1)
+    )
+
+    st.metric(
+        "🏭 Pres Puanı",
+        round(pres_genel_puan, 1)
+    )
+
+    st.metric(
+        "🎨 Boyahane Puanı",
+        round(boyahane_genel_puan, 1)
+    )
+
+    puanlar = []
+
+    if genel_puan > 0:
+        puanlar.append(genel_puan)
+
+    if pres_genel_puan > 0:
+        puanlar.append(pres_genel_puan)
+
+    if boyahane_genel_puan > 0:
+        puanlar.append(boyahane_genel_puan)
+
+    if len(puanlar) > 0:
+        genel_fizibilite = sum(puanlar) / len(puanlar)
+    else:
+        genel_fizibilite = 0
+
+    st.divider()
+
+    if genel_fizibilite >= 80:
+
+        st.success(
+            f"🟢 Genel Fizibilite : {round(genel_fizibilite,1)} / 100"
+        )
+
+    elif genel_fizibilite >= 60:
+
+        st.warning(
+            f"🟡 Genel Fizibilite : {round(genel_fizibilite,1)} / 100"
+        )
+
+    else:
+
+        st.error(
+            f"🔴 Genel Fizibilite : {round(genel_fizibilite,1)} / 100"
+        )
