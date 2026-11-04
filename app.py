@@ -1696,16 +1696,19 @@ with tab4:
                 sonuclar = []
 
                 kaliplar = [
-                        {"cap":180, "paket":130, "pres":["6"]},
-                        {"cap":200, "paket":160, "pres":["6","8"]},
-                        {"cap":230, "paket":160, "pres":["6","8"]},
-                        {"cap":260, "paket":160, "pres":["6","8"]},
-                        {"cap":300, "paket":200, "pres":["8"]},
-                        {"cap":330, "paket":250, "pres":["8"]},
-                        {"cap":350, "paket":160, "pres":["6"]},
-                        {"cap":360, "paket":200, "pres":["8"]},
-                        {"cap":475, "paket":200, "pres":["8"]}
+                    {"cap": 180, "paket": 130, "pres": ['6"']},
+
+                    {"cap": 200, "paket": 160, "pres": ['6"', '8"']},
+                    {"cap": 230, "paket": 160, "pres": ['6"', '8"']},
+                    {"cap": 260, "paket": 160, "pres": ['6"', '8"']},
+                    {"cap": 300, "paket": 200, "pres": ['6"', '8"']},
+                    {"cap": 330, "paket": 250, "pres": ['6"', '8"']},
+                    {"cap": 350, "paket": 160, "pres": ['6"', '8"']},
+
+                    {"cap": 360, "paket": 200, "pres": ['8"']},
+                    {"cap": 475, "paket": 200, "pres": ['8"']}
 ]
+
                 presler = [
                 {
                     "pres": '6"',
@@ -1878,10 +1881,8 @@ with tab4:
 
                             if kalip["cap"] >= hedef_cap:
 
-                                kalip_capi = kalip["cap"]
-                                paket_boyu = kalip["paket"]
-
-                                break
+                                if pres["pres"] not in kalip["pres"]:
+                                    continue
 
                             if kalip["cap"] >= hedef_cap:
 
