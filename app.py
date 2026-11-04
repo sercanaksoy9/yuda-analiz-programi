@@ -1884,11 +1884,13 @@ with tab4:
 
                     sonuc_df = pd.DataFrame(sonuclar)
 
-                    st.dataframe(
-                        sonuc_df,
-                        use_container_width=True
-                    )
+                    with st.expander("Detay Hesap Tablosu"):
 
+                        st.dataframe(
+                            sonuc_df,
+                            use_container_width=True
+                    )
+                        
                     sonuc_6 = sonuc_df[
                         sonuc_df["Pres"] == '6"'
                     ]
