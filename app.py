@@ -1695,6 +1695,17 @@ with tab4:
 
                 sonuclar = []
 
+                kaliplar = [
+                        {"cap":180, "paket":130, "pres":["6"]},
+                        {"cap":200, "paket":160, "pres":["6","8"]},
+                        {"cap":230, "paket":160, "pres":["6","8"]},
+                        {"cap":260, "paket":160, "pres":["6","8"]},
+                        {"cap":300, "paket":200, "pres":["8"]},
+                        {"cap":330, "paket":250, "pres":["8"]},
+                        {"cap":350, "paket":160, "pres":["6"]},
+                        {"cap":360, "paket":200, "pres":["8"]},
+                        {"cap":475, "paket":200, "pres":["8"]}
+]
                 presler = [
                 {
                     "pres": '6"',
@@ -1723,6 +1734,25 @@ with tab4:
                 for pres in presler:
 
                     for sorti in range(1, pres["sorti_max"] + 1):
+
+                        # Kullanılan standart sortiler
+
+                        if sorti not in [1, 2, 4, 6]:
+                            continue
+
+                        # DU'ya göre maksimum sorti
+
+                        if du > 150:
+                            max_sorti_du = 1
+
+                        elif du > 100:
+                            max_sorti_du = 2
+
+                        else:
+                            max_sorti_du = 6
+
+                        if sorti > max_sorti_du:
+                            continue
 
                         # Gramaja göre sorti limiti
 
@@ -1838,6 +1868,50 @@ with tab4:
 
                         if boy_sayisi < 1:
                                 continue
+
+                        hedef_cap = du * 2
+
+                        kalip_capi = None
+                        paket_boyu = None
+
+                        for kalip in kaliplar:
+
+                                if kalip["cap"] >= hedef_cap:
+
+                                    kalip_capi = kalip["cap"]
+                                    paket_boyu = kalip["paket"]
+                                    break
+
+                                if kalip_tipi == "Düz Kalıp":
+
+                                        fiyatlar = {
+                                            (180,130): {1:385, 2:424, 4:489, 6:501},
+                                            (200,160): {1:495, 2:545, 4:629, 6:644},
+                                            (230,160): {1:645, 2:710, 4:819, 6:839},
+                                            (260,160): {1:785, 2:864, 4:997, 6:1021},
+                                            (300,200): {1:1360, 2:1496, 4:1727, 6:1768},
+                                            (330,250): {1:1890, 2:2079, 4:2400, 6:2457},
+                                            (350,160): {1:1590, 2:1749, 4:2019, 6:2067},
+                                            (360,200): {1:2185, 2:2404, 4:2775, 6:2841},
+                                            (475,200): {1:3720, 2:4092, 4:4724, 6:4836},
+                                        }
+
+                                else:
+
+                                        fiyatlar = {
+                                            (180,130): {1:480, 2:528, 4:610, 6:624},
+                                            (200,160): {1:620, 2:682, 4:787, 6:806},
+                                            (230,160): {1:805, 2:886, 4:1022, 6:1047},
+                                            (260,160): {1:980, 2:1078, 4:1245, 6:1274},
+                                            (300,200): {1:1700, 2:1870, 4:2159, 6:2210},
+                                            (330,250): {1:2365, 2:2602, 4:3004, 6:3075},
+                                            (350,160): {1:1985, 2:2184, 4:2521, 6:2581},
+                                            (360,200): {1:2730, 2:3003, 4:3467, 6:3549},
+                                            (475,200): {1:4650, 2:5115, 4:5906, 6:6045},
+                                        }
+
+                               # kalip_bedeli = fiyatlar[(kalip_capi, paket_boyu)][sorti]
+                                
         
                         toplam_biyet_kg = (
                                 biyet_boyu
@@ -1861,6 +1935,8 @@ with tab4:
                         if boy_sayisi < 1:
                             continue
 
+                        kalip_bedeli = fiyatlar[(kalip_capi, paket_boyu)][sorti]
+
                         sonuclar.append({
 
                         "Ekstrüzyon": round(
@@ -1869,6 +1945,8 @@ with tab4:
                         ),
                         "Pres": pres["pres"],
                         "Sorti": sorti,
+                        "Kalıp": f"{kalip_capi} x {paket_boyu}",
+                        "Kalıp Bedeli €": kalip_bedeli,
                         "Etkin Gramaj": gramaj * sorti,
                         "Boy Sayısı": boy_sayisi,
                         "Biyet Boyu (cm)": round(biyet_boyu, 2),
@@ -1878,6 +1956,7 @@ with tab4:
                         "Fire %": round(fire, 2),
                         "Doluluk %": round(doluluk, 2),
                         "Biyet Kullanım %": round(biyet_kullanim, 2)
+                        
                     })
 
                 if len(sonuclar) > 0:
@@ -1928,6 +2007,10 @@ with tab4:
 
                     ✅ Boy Sayısı : {en_iyi_6['Boy Sayısı']}
 
+                    🔩 Kalıp : {en_iyi_6['Kalıp']}
+
+                    💰 Kalıp Bedeli : € {en_iyi_6['Kalıp Bedeli €']}
+
                     📏 Biyet Boyu : {en_iyi_6['Biyet Boyu (cm)']:.2f} cm
 
                     ⚖️ Üretilen Kg : {en_iyi_6['Üretilen Kg']:.2f}
@@ -1952,6 +2035,10 @@ with tab4:
                         ✅ Sorti : {en_iyi_8['Sorti']}
 
                         ✅ Boy Sayısı : {en_iyi_8['Boy Sayısı']}
+
+                        🔩 Kalıp : {en_iyi_8['Kalıp']}
+
+                        💰 Kalıp Bedeli : € {en_iyi_8['Kalıp Bedeli €']}
 
                         📏 Biyet Boyu : {en_iyi_8['Biyet Boyu (cm)']:.2f} cm
 
