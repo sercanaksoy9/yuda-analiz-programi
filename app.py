@@ -202,13 +202,11 @@ with tab1:
             f"Şekil Faktörü = {round(sekil_faktoru,2)}"
 )
 
-
         du = st.number_input(
         "🟢 DU",
         min_value=0.0,
         value=bulunan_du
     )
-        
 
         ana_et = st.number_input(
             "🔴 Ana Et Kalınlığı",
@@ -1919,7 +1917,6 @@ with tab4:
                                         }
 
                         kalip_bedeli = fiyatlar[(kalip_capi, paket_boyu)][sorti]
-                                
         
                         toplam_biyet_kg = (
                                 biyet_boyu
@@ -1939,6 +1936,63 @@ with tab4:
                                 biyet_boyu
                                 / pres["max_biyet"]
                             ) * 100
+
+                        kaliphane_puani = st.session_state.get(
+                                "genel_puan",
+                                80
+                            )
+
+                        if kaliphane_puani < 60:
+                            hiz = 3
+
+                        elif kaliphane_puani < 70:
+                            hiz = 4
+
+                        elif kaliphane_puani < 80:
+                            hiz = 5
+
+                        elif kaliphane_puani < 90:
+                            hiz = 6
+
+                        else:
+                            hiz = 7
+
+                        if pres["pres"] == '6"':
+                            olu_zaman = 14
+                        else:
+                            olu_zaman = 18
+
+                        biyet_boyu_mm = biyet_boyu * 10
+
+                        baski_suresi = (
+                            (biyet_boyu_mm / hiz)
+                            * 0.90
+                        )
+
+                        cevrim_suresi = (
+                            baski_suresi
+                            + olu_zaman
+                        )
+
+                        biyet_saat = (
+                            3600
+                            / cevrim_suresi
+                        )
+
+                        bir_biyet_kg = (
+                            biyet_boyu
+                            * pres["kg_cm_biyet"]
+                        )
+
+                        saatlik_biyet_kg = (
+                            biyet_saat
+                            * bir_biyet_kg
+                        )
+
+                        saatlik_net_kg = (
+                            saatlik_biyet_kg
+                            * (1 - fire / 100)
+                        )
 
                         if boy_sayisi < 1:
                             continue
@@ -1963,8 +2017,12 @@ with tab4:
                         "Toplam Biyet Kg": round(toplam_biyet_kg, 2),
                         "Fire %": round(fire, 2),
                         "Doluluk %": round(doluluk, 2),
-                        "Biyet Kullanım %": round(biyet_kullanim, 2)
-                        
+                        "Biyet Kullanım %": round(biyet_kullanim, 2),
+                        "Hız (mm/sn)": hiz,
+                        "Çevrim Süresi (sn)": round(cevrim_suresi, 1),
+                        "Saatlik Üretim (kg/saat)": round(saatlik_net_kg, 0),
+
+                                                
                     })
 
                 if len(sonuclar) > 0:
@@ -2026,6 +2084,13 @@ with tab4:
                     🔥 Fire : %{en_iyi_6['Fire %']:.2f}
 
                     📊 Biyet Kullanımı : %{en_iyi_6['Biyet Kullanım %']:.2f}
+
+                    ⚡ Hız : {en_iyi_6['Hız (mm/sn)']} mm/sn
+
+                    ⏱ Çevrim Süresi : {en_iyi_6['Çevrim Süresi (sn)']} sn
+
+                    🏭 Saatlik Üretim : {en_iyi_6['Saatlik Üretim (kg/saat)']} kg/saat
+
                         """)
 
 
@@ -2055,6 +2120,12 @@ with tab4:
                         🔥 Fire : %{en_iyi_8['Fire %']:.2f}
 
                         📊 Biyet Kullanımı : %{en_iyi_8['Biyet Kullanım %']:.2f}
+
+                        ⚡ Hız : {en_iyi_8['Hız (mm/sn)']} mm/sn
+                        
+                        ⏱ Çevrim Süresi : {en_iyi_8['Çevrim Süresi (sn)']} sn
+
+                        🏭 Saatlik Üretim : {en_iyi_8['Saatlik Üretim (kg/saat)']} kg/saat
                             """)
 
                             st.divider()
