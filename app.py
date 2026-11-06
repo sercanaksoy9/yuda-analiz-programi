@@ -2265,12 +2265,12 @@ with tab4:
                     ]
 
                     if len(sonuc_6) > 0:
-
                         en_iyi_6 = sonuc_6.sort_values(
                             by="Biyet Verim %",
                             ascending=False
                         ).iloc[0]
 
+                    if len(sonuc_8) > 0:
                         en_iyi_8 = sonuc_8.sort_values(
                             by="Biyet Verim %",
                             ascending=False
@@ -2324,43 +2324,43 @@ with tab4:
 
                     with col2:
 
-                        if len(sonuc_8) > 0:
+                            if len(sonuc_8) > 0:
 
-                            st.success(f"""
-                        ### 🟢 8" PRES
+                                st.success(f"""
+                                ### 🟢 8" PRES
 
-                        ✅ Sorti : {en_iyi_8['Sorti']}
+                                ✅ Sorti : {en_iyi_8['Sorti']}
 
-                        ✅ Boy Sayısı : {en_iyi_8['Boy Sayısı']}
+                                ✅ Boy Sayısı : {en_iyi_8['Boy Sayısı']}
 
-                        🔩 Kalıp : {en_iyi_8['Kalıp']}
+                                🔩 Kalıp : {en_iyi_8['Kalıp']}
 
-                        💰 Kalıp Bedeli : € {en_iyi_8['Kalıp Bedeli €']}
+                                💰 Kalıp Bedeli : € {en_iyi_8['Kalıp Bedeli €']}
 
-                        📏 Biyet Boyu : {en_iyi_8['Biyet Boyu (cm)']:.2f} cm
+                                📏 Biyet Boyu : {en_iyi_8['Biyet Boyu (cm)']:.2f} cm
 
-                        ⚖️ Üretilen Kg : {en_iyi_8['Üretilen Kg']:.2f}
+                                ⚖️ Üretilen Kg : {en_iyi_8['Üretilen Kg']:.2f}
 
-                        🔥 Fire : %{en_iyi_8['Fire %']:.2f}
+                                🔥 Fire : %{en_iyi_8['Fire %']:.2f}
 
-                        📊 Biyet Kullanımı : %{en_iyi_8['Biyet Kullanım %']:.2f}
+                                📊 Biyet Kullanımı : %{en_iyi_8['Biyet Kullanım %']:.2f}
 
-                        ⚡ Hız : {en_iyi_8['Hız (mm/sn)']} mm/sn
-                        
-                        ⏱ Çevrim Süresi : {en_iyi_8['Çevrim Süresi (sn)']} sn
+                                ⚡ Hız : {en_iyi_8['Hız (mm/sn)']} mm/sn
+                                
+                                ⏱ Çevrim Süresi : {en_iyi_8['Çevrim Süresi (sn)']} sn
 
-                        🏭 Saatlik Üretim : {en_iyi_8['Saatlik Üretim (kg/saat)']} kg/saat
-                          """)
+                                🏭 Saatlik Üretim : {en_iyi_8['Saatlik Üretim (kg/saat)']} kg/saat
+                                """)
 
-                            fig = kalip_yerlesim_gorseli(
-                                kalip_capi=int(en_iyi_8["Kalıp"].split(" x ")[0]),
-                                sorti=en_iyi_8["Sorti"],
-                                sorti_yerlesim=sorti_yerlesim,
-                                pres_tipi='8"'
-                            )
+                                fig = kalip_yerlesim_gorseli(
+                                        kalip_capi=int(en_iyi_8["Kalıp"].split(" x ")[0]),
+                                        sorti=en_iyi_8["Sorti"],
+                                        sorti_yerlesim=sorti_yerlesim,
+                                        pres_tipi='8"'
+                                )
 
-                            st.pyplot(fig)
-                else:
-                    st.error("Uygun pres kombinasyonu bulunamadı.")  
+                                st.pyplot(fig)
+                            else:
+                                st.error("Uygun pres kombinasyonu bulunamadı.")  
 
                    
