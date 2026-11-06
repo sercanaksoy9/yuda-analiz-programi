@@ -2239,10 +2239,10 @@ with tab4:
                         "Saatlik Üretim (kg/saat)": round(saatlik_net_kg, 0),
                         "Yerleşim": sorti_yerlesim,
                         "Test Çap": hedef_cap,
-
-
-
-                                                
+                        "Biyet Verim %": round(
+                        (biyet_boyu / pres["max_biyet"]) * 100,
+                        2
+                        ),                           
                     })
 
                 if len(sonuclar) > 0:
@@ -2266,16 +2266,14 @@ with tab4:
 
                     if len(sonuc_6) > 0:
 
-                            en_iyi_6 = sonuc_6.sort_values(
-                            by=["Biyet Kullanım %", "Fire %"],
-                            ascending=[False, True]
+                        en_iyi_6 = sonuc_6.sort_values(
+                            by="Biyet Verim %",
+                            ascending=False
                         ).iloc[0]
 
-                    if len(sonuc_8) > 0:
-
-                            en_iyi_8 = sonuc_8.sort_values(
-                            by=["Biyet Kullanım %", "Fire %"],
-                            ascending=[False, True]
+                        en_iyi_8 = sonuc_8.sort_values(
+                            by="Biyet Verim %",
+                            ascending=False
                         ).iloc[0]
 
                     col1, col2 = st.columns(2)
