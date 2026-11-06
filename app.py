@@ -3,6 +3,10 @@ import re
 import streamlit as st
 import pdfplumber
 import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle, Rectangle
+
+
 st.set_page_config(
     page_title="Ön Fizibilite",
     layout="wide"
@@ -710,9 +714,6 @@ with tab1:
         else:
             p_pres_ekstruzyon = 1
 
-        
-
-    
     
         if sorti == 1:
             p_sorti = 10
@@ -1722,6 +1723,7 @@ with tab4:
                         return cap
 
                 return "NOK"
+
         
         if st.button("🏆 En Uygun Presi Bul"):
 
@@ -1794,22 +1796,23 @@ with tab4:
                         else:
                             max_sorti_izin = 6
 
-                        if sorti > max_sorti_izin:
-                            continue
+                        #if sorti > max_sorti_izin:
+                        #    continue
 
                         etkin_gramaj = gramaj * sorti
-                        if not (
-                            pres["gramaj_min"]
-                            <= etkin_gramaj
-                            <= pres["gramaj_max"]
-                        ):
-                            continue
 
-                        if etkin_gramaj < pres["gramaj_min"]:
-                            continue
+                        #if not (
+                        #    pres["gramaj_min"]
+                        #    <= etkin_gramaj
+                        #    <= pres["gramaj_max"]
+                        #):
+                        #    continue
 
-                        if etkin_gramaj > pres["gramaj_max"]:
-                            continue
+                        #if etkin_gramaj < pres["gramaj_min"]:
+                        #    continue
+
+                        #if etkin_gramaj > pres["gramaj_max"]:
+                        #    continue
                         
 
                         if kalip_tipi == "Düz Kalıp" and du > pres["max_du_duz"]:
@@ -1940,6 +1943,133 @@ with tab4:
 
                             return "NOK"
 
+                        def kalip_yerlesim_gorseli(
+                                kalip_capi,
+                                sorti,
+                                sorti_yerlesim,
+                                pres_tipi
+                            ):
+                                fig, ax = plt.subplots(figsize=(4,4))
+
+                                biyet_capi = 158 if pres_tipi == '6"' else 203
+
+                                # Kalıp çapı
+                                ax.add_patch(
+                                    Circle(
+                                        (0, 0),
+                                        kalip_capi / 2,
+                                        fill=False,
+                                        linewidth=3,
+                                        color="blue"
+                                    )
+                                )
+
+                                # Biyet çapı
+                                ax.add_patch(
+                                    Circle(
+                                        (0, 0),
+                                        biyet_capi / 2,
+                                        fill=False,
+                                        linewidth=2,
+                                        linestyle="--",
+                                        color="red"
+                                    )
+                                )
+                                if sorti == 1:
+
+                                    ax.add_patch(
+                                        Rectangle(
+                                            (-20, -10),
+                                            40,
+                                            20,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                    )
+                                )
+
+                                elif sorti == 2 and sorti_yerlesim == "Dikey":
+
+                                    ax.add_patch(
+                                        Rectangle(
+                                            (-20, 10),
+                                            40,
+                                            20,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                    )
+                                )
+
+                                    ax.add_patch(
+                                        Rectangle(
+                                            (-20, -30),
+                                            40,
+                                            20,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                    )
+                                )
+
+                                elif sorti == 2 and sorti_yerlesim == "Yatay":
+
+                                    ax.add_patch(
+                                        Rectangle(
+                                            (-45, -10),
+                                            40,
+                                            20,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                    )
+                                )
+
+                                    ax.add_patch(
+                                        Rectangle(
+                                            (5, -10),
+                                            40,
+                                            20,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                    )
+                                )
+
+                                elif sorti == 4:
+
+                                    for x, y in [
+                                        (-45, 10),
+                                        (5, 10),
+                                        (-45, -30),
+                                        (5, -30),
+                                ]:
+
+                                        ax.add_patch(
+                                            Rectangle(
+                                                (x, y),
+                                                40,
+                                                20,
+                                                facecolor="lime",
+                                                edgecolor="black",
+                                                linewidth=2
+                                        )
+                                    )
+
+                                limit = (kalip_capi / 2) + 20
+
+                                ax.set_xlim(-limit, limit)
+                                ax.set_ylim(-limit, limit)
+
+                                ax.set_aspect("equal")
+                                ax.axis("off")
+                                ax.set_title(
+                                f"{sorti} Sorti | Kalıp Ø{kalip_capi} | Biyet Ø{biyet_capi}",
+                                fontsize=12,
+                                fontweight="bold"
+    )
+                                return fig
+
                         hedef_cap = kalip_capi_hesapla(
                         du,
                         sorti,
@@ -1967,7 +2097,6 @@ with tab4:
 
                         if kalip_capi is None:
                                 continue
-
 
 
                         if kalip_tipi == "Düz Kalıp":
@@ -2108,8 +2237,10 @@ with tab4:
                         "Hız (mm/sn)": hiz,
                         "Çevrim Süresi (sn)": round(cevrim_suresi, 1),
                         "Saatlik Üretim (kg/saat)": round(saatlik_net_kg, 0),
-                        "TEST Sorti": sorti,
-                        "TEST Cap": hedef_cap,
+                        "Yerleşim": sorti_yerlesim,
+                        "Test Çap": hedef_cap,
+
+
 
                                                 
                     })
@@ -2151,11 +2282,10 @@ with tab4:
 
                     with col1:
 
-                    
-
                         if len(sonuc_6) > 0:
 
                             st.info(f"""
+
                     ### 🔵 6" PRES
 
                     ✅ Sorti : {en_iyi_6['Sorti']}
@@ -2179,9 +2309,16 @@ with tab4:
                     ⏱ Çevrim Süresi : {en_iyi_6['Çevrim Süresi (sn)']} sn
 
                     🏭 Saatlik Üretim : {en_iyi_6['Saatlik Üretim (kg/saat)']} kg/saat
+                    """)
+                            
+                            fig = kalip_yerlesim_gorseli(
+                                kalip_capi=int(en_iyi_6["Kalıp"].split(" x ")[0]),
+                                sorti=en_iyi_6["Sorti"],
+                                sorti_yerlesim=sorti_yerlesim,
+                                pres_tipi='6"'
+                            )
 
-                        """)
-
+                            st.pyplot(fig)
 
                         else:
                             st.warning("Bu gramaj için uygun değil")
@@ -2215,28 +2352,16 @@ with tab4:
                         ⏱ Çevrim Süresi : {en_iyi_8['Çevrim Süresi (sn)']} sn
 
                         🏭 Saatlik Üretim : {en_iyi_8['Saatlik Üretim (kg/saat)']} kg/saat
-                            """)
+                          """)
 
-                            st.divider()
+                            fig = kalip_yerlesim_gorseli(
+                                kalip_capi=int(en_iyi_8["Kalıp"].split(" x ")[0]),
+                                sorti=en_iyi_8["Sorti"],
+                                sorti_yerlesim=sorti_yerlesim,
+                                pres_tipi='8"'
+                            )
 
-                            st.warning(f"""
-
-                        ⭐ GENEL TAVSİYE
-
-                        🏭 Pres : {en_iyi_8['Pres']}
-
-                        🔢 Sorti : {en_iyi_8['Sorti']}
-
-                        📏 Biyet Boyu : {en_iyi_8['Biyet Boyu (cm)']:.2f} cm
-
-                        ⚖️ Üretilen Kg : {en_iyi_8['Üretilen Kg']:.2f}
-
-                        🔥 Fire : %{en_iyi_8['Fire %']:.2f}
-                                """)
-
-                        else:
-                            st.warning("Bu gramaj için uygun değil")
-
+                            st.pyplot(fig)
                 else:
                     st.error("Uygun pres kombinasyonu bulunamadı.")  
 
