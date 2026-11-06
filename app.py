@@ -1689,6 +1689,40 @@ with tab4:
             "Kalıp Tipi",
             ["Düz Kalıp", "Köprülü Kalıp"]
         )
+        sorti_yerlesim = st.radio(
+            "🔄 2 Sorti Yerleşimi",
+            ["Dikey", "Yatay"],
+            horizontal=True
+        )
+
+        def kalip_capi_hesapla(du, sorti, sorti_yerlesim):
+
+        # 2 Sorti Dikey
+
+            if sorti == 2 and sorti_yerlesim == "Dikey":
+
+                hesap = (2 * du) + 30
+
+                if hesap < 100:
+                    hesap += 80
+
+                elif hesap < 150:
+                    hesap += 100
+
+                elif hesap < 200:
+                    hesap += 120
+
+                else:
+                    hesap += 150
+
+                standartlar = [180, 200, 230, 260, 300, 360]
+
+                for cap in standartlar:
+                    if hesap <= cap:
+                        return cap
+
+                return "NOK"
+        
         if st.button("🏆 En Uygun Presi Bul"):
 
                 sonuclar = []
@@ -1741,16 +1775,10 @@ with tab4:
                         if sorti not in [1, 2, 4, 6]:
                             continue
 
-                        # DU'ya göre maksimum sorti
+                        #DU'ya göre maksimum sorti
 
-                        if du > 150:
-                            max_sorti_du = 1
 
-                        elif du > 100:
-                            max_sorti_du = 2
-
-                        else:
-                            max_sorti_du = 6
+                        max_sorti_du = 6
 
                         if sorti > max_sorti_du:
                             continue
@@ -1869,8 +1897,57 @@ with tab4:
 
                         if boy_sayisi < 1:
                                 continue
+                        hesaplanan_cap = kalip_capi_hesapla(
+                            du,
+                            sorti,
+                            sorti_yerlesim
+                        )
 
-                        hedef_cap = du * 2
+                        def kalip_capi_hesapla(du, sorti, sorti_yerlesim):
+
+                            if sorti == 1:
+                                hesap = du
+
+                            elif sorti == 2 and sorti_yerlesim == "Dikey":
+                                hesap = du + 30
+
+                            elif sorti == 2 and sorti_yerlesim == "Yatay":
+                                hesap = (2 * du) + 30
+
+                            elif sorti == 4:
+                                hesap = (2 * du) + 60
+
+                            else:
+                                return "NOK"
+
+                            if hesap < 100:
+                                hesap += 80
+                            elif hesap < 150:
+                                hesap += 100
+                            elif hesap < 200:
+                                hesap += 120
+                            else:
+                                hesap += 150
+
+                            standartlar = [180, 200, 230, 260, 300, 360]
+
+                            for cap in standartlar:
+                                if hesap <= cap:
+                                    return cap
+
+                            if sorti in [1, 2] and sorti_yerlesim == "Dikey":
+                                return 480
+
+                            return "NOK"
+
+                        hedef_cap = kalip_capi_hesapla(
+                        du,
+                        sorti,
+                        sorti_yerlesim
+                    )
+                        
+                        if hedef_cap in ["NOK", None]:
+                            continue
 
                         kalip_capi = None
                         paket_boyu = None
@@ -1887,6 +1964,11 @@ with tab4:
                                     kalip_capi = kalip["cap"]
                                     paket_boyu = kalip["paket"]
                                     break
+
+                        if kalip_capi is None:
+                                continue
+
+
 
                         if kalip_tipi == "Düz Kalıp":
 
@@ -1915,6 +1997,11 @@ with tab4:
                                         (360,200): {1:2730, 2:3003, 4:3467, 6:3549},
                                         (475,200): {1:4650, 2:5115, 4:5906, 6:6045},
                                         }
+
+                        
+                        if kalip_capi is None:
+
+                            continue
 
                         kalip_bedeli = fiyatlar[(kalip_capi, paket_boyu)][sorti]
         
@@ -2021,6 +2108,8 @@ with tab4:
                         "Hız (mm/sn)": hiz,
                         "Çevrim Süresi (sn)": round(cevrim_suresi, 1),
                         "Saatlik Üretim (kg/saat)": round(saatlik_net_kg, 0),
+                        "TEST Sorti": sorti,
+                        "TEST Cap": hedef_cap,
 
                                                 
                     })
