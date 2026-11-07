@@ -4,7 +4,7 @@ import streamlit as st
 import pdfplumber
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle
+from matplotlib.patches import Circle 
 
 
 st.set_page_config(
@@ -1947,7 +1947,8 @@ with tab4:
                                 kalip_capi,
                                 sorti,
                                 sorti_yerlesim,
-                                pres_tipi
+                                pres_tipi,
+                                du
                             ):
                                 fig, ax = plt.subplots(figsize=(4,4))
 
@@ -1975,86 +1976,89 @@ with tab4:
                                         color="red"
                                     )
                                 )
+                                r = du / 2
+                                bosluk = 5
+
                                 if sorti == 1:
 
                                     ax.add_patch(
-                                        Rectangle(
-                                            (-20, -10),
-                                            40,
-                                            20,
+                                        Circle(
+                                            (0, 0),
+                                            r,
                                             facecolor="lime",
                                             edgecolor="black",
                                             linewidth=2
+                                        )
                                     )
-                                )
 
                                 elif sorti == 2 and sorti_yerlesim == "Dikey":
 
-                                    ax.add_patch(
-                                        Rectangle(
-                                            (-20, 10),
-                                            40,
-                                            20,
-                                            facecolor="lime",
-                                            edgecolor="black",
-                                            linewidth=2
-                                    )
-                                )
+                                    offset = r + bosluk
 
                                     ax.add_patch(
-                                        Rectangle(
-                                            (-20, -30),
-                                            40,
-                                            20,
+                                        Circle(
+                                            (0, offset),
+                                            r,
                                             facecolor="lime",
                                             edgecolor="black",
                                             linewidth=2
+                                        )
                                     )
-                                )
+
+                                    ax.add_patch(
+                                        Circle(
+                                            (0, -offset),
+                                            r,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                        )
+                                    )
 
                                 elif sorti == 2 and sorti_yerlesim == "Yatay":
 
-                                    ax.add_patch(
-                                        Rectangle(
-                                            (-45, -10),
-                                            40,
-                                            20,
-                                            facecolor="lime",
-                                            edgecolor="black",
-                                            linewidth=2
-                                    )
-                                )
+                                    offset = r + bosluk
 
                                     ax.add_patch(
-                                        Rectangle(
-                                            (5, -10),
-                                            40,
-                                            20,
+                                        Circle(
+                                            (-offset, 0),
+                                            r,
                                             facecolor="lime",
                                             edgecolor="black",
                                             linewidth=2
+                                        )
                                     )
-                                )
+
+                                    ax.add_patch(
+                                        Circle(
+                                            (offset, 0),
+                                            r,
+                                            facecolor="lime",
+                                            edgecolor="black",
+                                            linewidth=2
+                                        )
+                                    )
 
                                 elif sorti == 4:
 
+                                    offset = r + bosluk
+
                                     for x, y in [
-                                        (-45, 10),
-                                        (5, 10),
-                                        (-45, -30),
-                                        (5, -30),
-                                ]:
+                                        (-offset, offset),
+                                        ( offset, offset),
+                                        (-offset,-offset),
+                                        ( offset,-offset),
+                                    ]:
 
                                         ax.add_patch(
-                                            Rectangle(
+                                            Circle(
                                                 (x, y),
-                                                40,
-                                                20,
+                                                r,
                                                 facecolor="lime",
                                                 edgecolor="black",
                                                 linewidth=2
+                                            )
                                         )
-                                    )
 
                                 limit = (kalip_capi / 2) + 20
 
@@ -2063,11 +2067,7 @@ with tab4:
 
                                 ax.set_aspect("equal")
                                 ax.axis("off")
-                                ax.set_title(
-                                f"{sorti} Sorti | Kalıp Ø{kalip_capi} | Biyet Ø{biyet_capi}",
-                                fontsize=12,
-                                fontweight="bold"
-    )
+
                                 return fig
 
                         hedef_cap = kalip_capi_hesapla(
@@ -2313,7 +2313,8 @@ with tab4:
                                 kalip_capi=int(en_iyi_6["Kalıp"].split(" x ")[0]),
                                 sorti=en_iyi_6["Sorti"],
                                 sorti_yerlesim=sorti_yerlesim,
-                                pres_tipi='6"'
+                                pres_tipi='6"',
+                                du=du
                             )
 
                             st.pyplot(fig)
@@ -2356,7 +2357,8 @@ with tab4:
                                         kalip_capi=int(en_iyi_8["Kalıp"].split(" x ")[0]),
                                         sorti=en_iyi_8["Sorti"],
                                         sorti_yerlesim=sorti_yerlesim,
-                                        pres_tipi='8"'
+                                        pres_tipi='8"',
+                                        du=du
                                 )
 
                                 st.pyplot(fig)
