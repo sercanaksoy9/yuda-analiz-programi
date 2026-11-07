@@ -1777,6 +1777,11 @@ with tab4:
                         if sorti not in [1, 2, 4, 6]:
                             continue
 
+                        # DU 160'tan büyükse 2 sorti deneme
+
+                        if du > 150 and sorti == 2:
+                            continue
+
                         #DU'ya göre maksimum sorti
 
 
@@ -1952,7 +1957,7 @@ with tab4:
                             ):
                                 fig, ax = plt.subplots(figsize=(4,4))
 
-                                biyet_capi = 158 if pres_tipi == '6"' else 203
+                                biyet_capi = 158 if pres_tipi == '6"' else 210
 
                                 # Kalıp çapı
                                 ax.add_patch(
