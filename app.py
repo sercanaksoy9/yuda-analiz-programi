@@ -2041,13 +2041,17 @@ with tab4:
                             ):
                                 fig, ax = plt.subplots(figsize=(4,4))
 
+                                goruntu_olcek = 0.75
                                 biyet_capi = 158 if pres_tipi == '6"' else 210
+                                kalip_r = (kalip_capi / 2) * goruntu_olcek
+                                biyet_r = (biyet_capi / 2) * goruntu_olcek
+                                r = (du / 2) * goruntu_olcek
 
                                 # Kalıp çapı
                                 ax.add_patch(
                                     Circle(
                                         (0, 0),
-                                        kalip_capi / 2,
+                                        kalip_r,
                                         fill=False,
                                         linewidth=3,
                                         color="blue"
@@ -2058,14 +2062,15 @@ with tab4:
                                 ax.add_patch(
                                     Circle(
                                         (0, 0),
-                                        biyet_capi / 2,
+                                        biyet_r,
                                         fill=False,
                                         linewidth=2,
                                         linestyle="--",
                                         color="red"
                                     )
                                 )
-                                r = du / 2
+                                goruntu_olcek = 0.85
+                                r = (du / 2) * goruntu_olcek
                                 bosluk = 5
 
                                 if sorti == 1:
@@ -2222,10 +2227,7 @@ with tab4:
                                             )
                                         )
 
-                                limit = (kalip_capi / 2) + 20
-
-
-                                limit = (kalip_capi / 2) + 20
+                                limit = kalip_r + 20
 
                                 ax.set_xlim(-limit, limit)
                                 ax.set_ylim(-limit, limit)
