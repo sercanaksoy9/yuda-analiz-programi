@@ -5,7 +5,7 @@ import pdfplumber
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle 
-
+import numpy as np
 
 st.set_page_config(
     page_title="Ön Fizibilite",
@@ -1696,35 +1696,155 @@ with tab4:
             horizontal=True
         )
 
-        def kalip_capi_hesapla(du, sorti, sorti_yerlesim):
+        def standart_kalip(cap, izin_475=False):
 
-        # 2 Sorti Dikey
-
-            if sorti == 2 and sorti_yerlesim == "Dikey":
-
-                hesap = (2 * du) + 30
-
-                if hesap < 100:
-                    hesap += 80
-
-                elif hesap < 150:
-                    hesap += 100
-
-                elif hesap < 200:
-                    hesap += 120
-
-                else:
-                    hesap += 150
-
-                standartlar = [180, 200, 230, 260, 300, 360]
-
-                for cap in standartlar:
-                    if hesap <= cap:
-                        return cap
-
+            if cap < 180:
+                return 180
+            elif cap < 200:
+                return 200
+            elif cap < 230:
+                return 230
+            elif cap < 260:
+                return 260
+            elif cap < 300:
+                return 300
+            elif cap < 360:
+                return 360
+            elif izin_475:
+                return 475
+            else:
                 return "NOK"
 
-        
+
+        def kalip_capi_hesapla(du, sorti, sorti_yerlesim, profil_tipi):
+
+            # KÖPRÜLÜ
+            if profil_tipi == "Köprülü Kalıp":
+
+                if sorti == 1:
+                    x = du
+
+                    if x < 100:
+                        y = x + 120
+                    elif x < 150:
+                        y = x + 150
+                    elif x < 200:
+                        y = x + 170
+                    else:
+                        y = x + 200
+
+                    return standart_kalip(y, izin_475=True)
+
+                elif sorti == 2 and sorti_yerlesim == "Dikey":
+                    x = du + 30
+
+                    if x < 100:
+                        y = x + 120
+                    elif x < 150:
+                        y = x + 150
+                    elif x < 200:
+                        y = x + 170
+                    else:
+                        y = x + 200
+
+                    return standart_kalip(y, izin_475=True)
+
+                elif sorti == 2 and sorti_yerlesim == "Yatay":
+                    x = (2 * du) + 30
+
+                    if x < 100:
+                        y = x + 80
+                    elif x < 150:
+                        y = x + 100
+                    elif x < 200:
+                        y = x + 120
+                    else:
+                        y = x + 150
+
+                    return standart_kalip(y)
+
+                elif sorti == 4:
+                    x = (2 * du) + 60
+
+                    if x < 100:
+                        y = x + 80
+                    elif x < 150:
+                        y = x + 100
+                    elif x < 200:
+                        y = x + 120
+                    else:
+                        y = x + 150
+
+                    return standart_kalip(y)
+
+                elif sorti == 6:
+                    x = (3 * du) + 70
+
+                    if x < 100:
+                        y = x + 80
+                    elif x < 150:
+                        y = x + 100
+                    elif x < 200:
+                        y = x + 120
+                    else:
+                        y = x + 150
+
+                    return standart_kalip(y)
+
+                elif sorti == 8:
+                    x = (4 * du) + 80
+
+                    if x < 100:
+                        y = x + 80
+                    elif x < 150:
+                        y = x + 100
+                    elif x < 200:
+                        y = x + 120
+                    else:
+                        y = x + 150
+
+                    return standart_kalip(y)
+
+            # SOLID
+            elif profil_tipi == "Düz Kalıp":
+
+                if sorti == 1:
+                    x = du
+
+                elif sorti == 2 and sorti_yerlesim == "Dikey":
+                    x = du + 30
+
+                elif sorti == 2 and sorti_yerlesim == "Yatay":
+                    x = (2 * du) + 20
+
+                elif sorti == 4:
+                    x = (2 * du) + 40
+
+                elif sorti == 6:
+                    x = (3 * du) + 40
+
+                elif sorti == 8:
+                    x = (4 * du) + 40
+
+                else:
+                    return "NOK"
+
+                if x < 110:
+                    y = x + 80
+                elif x < 150:
+                    y = x + 100
+                elif x < 200:
+                    y = x + 120
+                else:
+                    y = x + 150
+
+                if sorti == 1 or (sorti == 2 and sorti_yerlesim == "Dikey"):
+                    return standart_kalip(y, izin_475=True)
+
+                return standart_kalip(y)
+
+            return "NOK"
+
         if st.button("🏆 En Uygun Presi Bul"):
 
                 sonuclar = []
@@ -1908,45 +2028,9 @@ with tab4:
                         hesaplanan_cap = kalip_capi_hesapla(
                             du,
                             sorti,
-                            sorti_yerlesim
+                            sorti_yerlesim,
+                            kalip_tipi
                         )
-
-                        def kalip_capi_hesapla(du, sorti, sorti_yerlesim):
-
-                            if sorti == 1:
-                                hesap = du
-
-                            elif sorti == 2 and sorti_yerlesim == "Dikey":
-                                hesap = du + 30
-
-                            elif sorti == 2 and sorti_yerlesim == "Yatay":
-                                hesap = (2 * du) + 30
-
-                            elif sorti == 4:
-                                hesap = (2 * du) + 60
-
-                            else:
-                                return "NOK"
-
-                            if hesap < 100:
-                                hesap += 80
-                            elif hesap < 150:
-                                hesap += 100
-                            elif hesap < 200:
-                                hesap += 120
-                            else:
-                                hesap += 150
-
-                            standartlar = [180, 200, 230, 260, 300, 360]
-
-                            for cap in standartlar:
-                                if hesap <= cap:
-                                    return cap
-
-                            if sorti in [1, 2] and sorti_yerlesim == "Dikey":
-                                return 480
-
-                            return "NOK"
 
                         def kalip_yerlesim_gorseli(
                                 kalip_capi,
@@ -2065,6 +2149,82 @@ with tab4:
                                             )
                                         )
 
+
+                                elif sorti == 4:
+
+                                    offset = r + bosluk
+
+                                    for x, y in [
+                                        (-offset, offset),
+                                        ( offset, offset),
+                                        (-offset,-offset),
+                                        ( offset,-offset),
+                                    ]:
+
+                                        ax.add_patch(
+                                            Circle(
+                                                (x, y),
+                                                r,
+                                                facecolor="lime",
+                                                edgecolor="black",
+                                                linewidth=2
+                                            )
+                                        )
+
+                                elif sorti == 6:
+
+                                    yerlesim_r = min(
+                                    (biyet_capi / 2) - r - 5,
+                                    r * 3
+                                )
+
+
+                                    for aci in [0, 60, 120, 180, 240, 300]:
+
+                                        x = yerlesim_r * np.cos(np.radians(aci))
+                                        y = yerlesim_r * np.sin(np.radians(aci))
+
+                                        ax.add_patch(
+                                            Circle(
+                                                (x, y),
+                                                r,
+                                                facecolor="lime",
+                                                edgecolor="black",
+                                                linewidth=2
+                                            )
+                                        )
+
+                                elif sorti == 8:
+
+                                    yerlesim_r = r * 2.6
+
+                                    for aci in [0, 45, 90, 135, 180, 225, 270, 315]:
+
+                                        x = yerlesim_r * np.cos(np.radians(aci))
+                                        y = yerlesim_r * np.sin(np.radians(aci))
+
+                                        ax.add_patch(
+                                            Circle(
+                                                (x, y),
+                                                r,
+                                                facecolor="lime",
+                                                edgecolor="black",
+                                                linewidth=2
+                                            )
+                                        )
+                                        ax.add_patch(
+                                            Circle(
+                                                (x, y),
+                                                r,
+                                                facecolor="lime",
+                                                edgecolor="black",
+                                                linewidth=2
+                                            )
+                                        )
+
+                                limit = (kalip_capi / 2) + 20
+
+
                                 limit = (kalip_capi / 2) + 20
 
                                 ax.set_xlim(-limit, limit)
@@ -2076,10 +2236,11 @@ with tab4:
                                 return fig
 
                         hedef_cap = kalip_capi_hesapla(
-                        du,
-                        sorti,
-                        sorti_yerlesim
-                    )
+                            du,
+                            sorti,
+                            sorti_yerlesim,
+                            kalip_tipi
+                            )
                         
                         if hedef_cap in ["NOK", None]:
                             continue
